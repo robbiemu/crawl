@@ -680,6 +680,8 @@ portal DNGN_PORTAL
 portal_rotated
 expired_portal DNGN_PORTAL_EXPIRED
 starry_portal DNGN_STARRY_PORTAL
+resonance_forge DNGN_RESONANCE_FORGE
+resonance_forge_spent DNGN_RESONANCE_FORGE_SPENT
 %rim 1
 transit_pandemonium DNGN_TRANSIT_PANDEMONIUM
 %rim 0
@@ -716,6 +718,9 @@ ossuary_gone DNGN_PORTAL_OSSUARY_GONE
 bailey_portal DNGN_PORTAL_BAILEY
 bailey_exit DNGN_EXIT_BAILEY
 bailey_gone DNGN_PORTAL_BAILEY_GONE
+resonance_forge_portal DNGN_PORTAL_RESONANCE_FORGE
+resonance_forge_exit DNGN_EXIT_RESONANCE_FORGE
+resonance_forge_gone DNGN_PORTAL_RESONANCE_FORGE_GONE
 gauntlet_portal DNGN_PORTAL_GAUNTLET
 gauntlet_gone DNGN_PORTAL_GAUNTLET_GONE
 trove_portal DNGN_PORTAL_TROVE

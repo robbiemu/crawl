@@ -1620,6 +1620,7 @@ static const vector<branch_type> portal_generation_order =
 #if TAG_MAJOR_VERSION == 34
     BRANCH_LABYRINTH,
 #endif
+    BRANCH_RESONANCE_FORGE,
     // do not pregenerate bazaar (TODO: this is non-ideal)
     // do not pregenerate trove
     BRANCH_WIZLAB,

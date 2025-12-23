@@ -2064,7 +2064,7 @@ bool god_hates_brand(const int brand)
     return false;
 }
 
-static void _rebrand_weapon(item_def& wpn)
+void rebrand_weapon(item_def& wpn)
 {
     const brand_type old_brand = get_weapon_brand(wpn);
     if (old_brand == SPWPN_SPECTRAL)
@@ -2120,7 +2120,7 @@ static void _brand_weapon(item_def &wpn)
 
     const string itname = _item_name(wpn);
 
-    _rebrand_weapon(wpn);
+    rebrand_weapon(wpn);
 
     bool success = true;
     colour_t flash_colour = BLACK;

@@ -1,0 +1,22 @@
+name: "resonance forgewright"
+glyph: {char: "g", colour: lightcyan}
+tile: dwarf
+flags: [fighter, speaks, warm_blood, see_invis]
+resists: {elec: 1, fire: 1}
+exp: 1400
+species: dwarf
+will: 80
+attacks:
+ - {type: hit, flavour: elec, damage: 24}
+ - {type: hit, damage: 14}
+hd: 15
+hp_10x: 900
+ac: 3
+ev: 12
+spells: resonance_forgewright
+has_corpse: true
+shout: shout
+intelligence: human
+uses: weapons_armour
+size: medium
+shape: humanoid

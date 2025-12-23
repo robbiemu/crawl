@@ -251,6 +251,7 @@ static const map<spell_type, mons_spell_logic> spell_to_logic = {
         _setup_minor_healing,
     } },
     { SPELL_SLUG_DART, _conjuration_logic(SPELL_SLUG_DART) },
+    { SPELL_KINETIC_GRAPNEL, _conjuration_logic(SPELL_KINETIC_GRAPNEL) },
     { SPELL_BECKONING, {
         [](const monster &caster)
         {
@@ -961,6 +962,17 @@ static const map<spell_type, mons_spell_logic> spell_to_logic = {
             caster.props[CLOCKWORK_BEE_TARGET].get_int() = foe->mid;
             caster.add_ench(mon_enchant(ENCH_CLOCKWORK_BEE_CAST, &caster, 40));
             simple_monster_message(caster, " begins winding a clockwork bee!");
+        },
+    } },
+    { SPELL_WALKING_ALEMBIC, {
+        [](const monster &caster)
+        {
+            return ai_action::good_or_impossible(
+                count_summons(&caster, SPELL_WALKING_ALEMBIC) == 0);
+        },
+        [](monster &caster, mon_spell_slot slot, bolt&) {
+            const int pow = mons_spellpower(caster, slot.spell);
+            cast_walking_alembic(caster, pow, false);
         },
     } },
     { SPELL_ALL_PURPOSE_TEMPERING, {
@@ -2217,6 +2229,7 @@ bolt mons_spell_beam(const monster* mons, spell_type spell_cast, int power,
     case SPELL_BOMBARD:
     case SPELL_STONE_ARROW:
     case SPELL_FORCE_LANCE:
+    case SPELL_KINETIC_GRAPNEL:
     case SPELL_CORROSIVE_BOLT:
     case SPELL_HIBERNATION:
     case SPELL_SLEEP:
@@ -2656,6 +2669,7 @@ bool setup_mons_cast(const monster* mons, bolt &pbolt, spell_type spell_cast,
     case SPELL_GLOOM:
     case SPELL_SLEETSTRIKE:
     case SPELL_LAUNCH_SPORANGIUM:
+    case SPELL_FORGE_BLAZEHEART_GOLEM:
         pbolt.range = 0;
         pbolt.glyph = 0;
         return true;
@@ -8123,6 +8137,16 @@ void mons_cast(monster* mons, bolt pbolt, spell_type spell_cast,
         monster* spire = _summon(*mons, MONS_LIGHTNING_SPIRE, summ_dur(2), slot, false);
         if (spire && !silenced(spire->pos()))
             mpr("An electric hum fills the air.");
+        return;
+    }
+    case SPELL_FORGE_BLAZEHEART_GOLEM:
+    {
+        monster* golem = _summon(*mons, MONS_BLAZEHEART_GOLEM, summ_dur(3), slot, false);
+        if (golem)
+        {
+            golem->blazeheart_heat = 4;
+            simple_monster_message(*mons, "binds molten heartsteel into a blazeheart golem.");
+        }
         return;
     }
 

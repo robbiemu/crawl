@@ -518,6 +518,7 @@ PORTAL_ENTRANCE(DNGN_ENTER_GAUNTLET, "gate leading to a gauntlet", "enter_gauntl
 PORTAL_ENTRANCE(DNGN_ENTER_ICE_CAVE, "frozen archway", "enter_ice_cave", WHITE),
 PORTAL_ENTRANCE(DNGN_ENTER_VOLCANO, "dark tunnel", "enter_volcano", RED),
 PORTAL_ENTRANCE(DNGN_ENTER_WIZLAB, "magical portal", "enter_wizlab", ETC_SHIMMER_BLUE),
+PORTAL_ENTRANCE(DNGN_ENTER_RESONANCE_FORGE, "gateway to a Resonance Forge", "enter_forge", LIGHTBLUE),
 PORTAL_ENTRANCE(DNGN_ENTER_DESOLATION, "crumbling gateway", "enter_desolation", WHITE),
 PORTAL_ENTRANCE(DNGN_ENTER_ARENA, "gate leading to Okawaru's Arena", "enter_arena", WHITE),
 PORTAL_ENTRANCE(DNGN_ENTER_CRUCIBLE, "gate leading to the Crucible of Flesh", "enter_crucible", WHITE),
@@ -538,6 +539,7 @@ PORTAL_EXIT(DNGN_EXIT_WIZLAB, "portal leading out of this place", "exit_wizlab",
 PORTAL_EXIT(DNGN_EXIT_DESOLATION, "gate leading back out of this place", "exit_desolation", WHITE),
 PORTAL_EXIT(DNGN_EXIT_ARENA, "gate leading back out of this place", "exit_arena", WHITE),
 PORTAL_EXIT(DNGN_EXIT_CRUCIBLE, "gate leading back out of this place", "exit_crucible", WHITE),
+PORTAL_EXIT(DNGN_EXIT_RESONANCE_FORGE, "gate leading back out of this place", "exit_forge", LIGHTBLUE),
 
 #define BRANCH_ENTRANCE(enum, name, vaultname)\
 {\
@@ -721,6 +723,22 @@ FOUNTAIN(DNGN_RUNELIGHT, "runelight", "runelight", ETC_DISJUNCTION),
     COLOUR_AND_MAP(DARKGREY),
     FFT_NONE, MF_TRANSPORTER_LANDING,
 },
+
+#if TAG_MAJOR_VERSION >= 34
+{
+    DNGN_RESONANCE_FORGE, "resonance forge dais", "resonance_forge",
+    DCHAR_STAIRS_DOWN, NUM_DCHAR_TYPES,
+    LIGHTBLUE, WHITE, LIGHTBLUE, LIGHTBLUE, LIGHTBLUE,
+    FFT_NOTABLE, MF_STAIR_DOWN,
+},
+
+{
+    DNGN_RESONANCE_FORGE_SPENT, "dormant forge dais", "resonance_forge_spent",
+    DCHAR_STAIRS_DOWN, NUM_DCHAR_TYPES,
+    COLOUR_AND_MAP(LIGHTGREY),
+    FFT_NONE, MF_STAIR_DOWN,
+},
+#endif
 
 {
     DNGN_SEALED_STAIRS_UP, "sealed passage leading up", "sealed_stair_up",

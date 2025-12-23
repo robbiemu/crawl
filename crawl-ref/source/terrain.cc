@@ -363,6 +363,8 @@ command_type feat_stair_direction(dungeon_feature_type feat)
     case DNGN_TRANSIT_PANDEMONIUM:
     case DNGN_TRANSPORTER:
     case DNGN_ENTER_SHOP:
+    case DNGN_RESONANCE_FORGE:
+    case DNGN_RESONANCE_FORGE_SPENT:
         return CMD_GO_DOWNSTAIRS;
 
     default:

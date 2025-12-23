@@ -248,6 +248,14 @@ static const mon_spellbook mspell_list[] =
       }
     },
 
+    {  MST_RESONANCE_FORGEWRIGHT,
+      {
+       { SPELL_FORGE_LIGHTNING_SPIRE, 50, MON_SPELL_WIZARD },
+       { SPELL_FORGE_BLAZEHEART_GOLEM, 30, MON_SPELL_WIZARD },
+       { SPELL_CLOCKWORK_BEE, 20, MON_SPELL_WIZARD },
+      }
+    },
+
 
     // ('h') Carnivorous quadrupeds.
     {  MST_BEAR,

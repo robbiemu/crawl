@@ -25,11 +25,14 @@
 #include "macro.h"
 #include "menu.h"
 #include "message.h"
+#include "mon-place.h"
+#include "mon-util.h"
 #include "mutation.h"
 #include "notes.h"
 #include "output.h"
 #include "perlin.h"
 #include "prompt.h"
+#include "resonance-forge.h"
 #include "religion.h"
 #include "sound.h"
 #include "state.h"
@@ -1499,6 +1502,67 @@ static int crawl_bane_desc(lua_State *ls)
     return 1;
 }
 
+static int crawl_resonance_forge_apply(lua_State *ls)
+{
+    const char *name = luaL_checkstring(ls, 1);
+    const string target_name = name ? name : "";
+    resonance_forge_target target;
+    if (!resonance_forge_target_from_string(target_name, target))
+        return luaL_error(ls, "unknown resonance forge target '%s'",
+                          target_name.c_str());
+
+    string message;
+    bool spawn_wave = true;
+    const bool ok = resonance_forge_apply(target, message, spawn_wave);
+    lua_pushboolean(ls, ok);
+    lua_pushstring(ls, message.c_str());
+    lua_pushboolean(ls, spawn_wave);
+    return 3;
+}
+
+static int crawl_resonance_forge_prompt(lua_State *ls)
+{
+    const char *name = luaL_checkstring(ls, 1);
+    const string target_name = name ? name : "";
+    resonance_forge_target target;
+    if (!resonance_forge_target_from_string(target_name, target))
+        return luaL_error(ls, "unknown resonance forge target '%s'",
+                          target_name.c_str());
+    const bool confirm = resonance_forge_show_prompt(target);
+    lua_pushboolean(ls, confirm);
+    return 1;
+}
+
+static int crawl_random_monster_place(lua_State *ls)
+{
+    const char *branch_name = luaL_checkstring(ls, 1);
+    int depth = luaL_checkinteger(ls, 2);
+    const bool allow_ood = lua_isnoneornil(ls, 3)
+        ? true
+        : lua_toboolean(ls, 3);
+
+    branch_type branch = branch_by_abbrevname(branch_name);
+    if (branch == NUM_BRANCHES)
+        return luaL_error(ls, "unknown branch '%s'", branch_name);
+
+    if (depth < 1)
+        depth = 1;
+    int max_depth = brdepth[branch];
+    if (max_depth <= 0)
+        max_depth = branches[branch].numlevels;
+    if (max_depth > 0 && depth > max_depth)
+        depth = max_depth;
+
+    level_id place(branch, depth);
+    monster_type mt = pick_random_monster(place, RANDOM_MONSTER, nullptr,
+                                          allow_ood);
+    if (mt == MONS_NO_MONSTER)
+        return 0;
+
+    lua_pushstring(ls, mons_type_name(mt, DESC_PLAIN).c_str());
+    return 1;
+}
+
 static const struct luaL_Reg crawl_clib[] =
 {
     { "mpr",                crawl_mpr },
@@ -1546,6 +1610,9 @@ static const struct luaL_Reg crawl_clib[] =
     { "bindkey",            crawl_bindkey },
     { "setopt",             crawl_setopt },
     { "read_options",       crawl_read_options },
+    { "resonance_forge_apply", crawl_resonance_forge_apply },
+    { "resonance_forge_prompt", crawl_resonance_forge_prompt },
+    { "random_monster",       crawl_random_monster_place },
     { "msgch_num",          crawl_msgch_num },
     { "msgch_name",         crawl_msgch_name },
     { "take_note",          crawl_take_note },

@@ -1,0 +1,122 @@
+: crawl_require('dlua/resonance_forge.lua')
+
+#######################################################################
+# Resonance Forge portal entry
+#
+# This vault just hands control over to the Lua hook, which sets all of
+# the per-game portal timing/weighting/floor tiles. Replace the MAP body
+# with whatever surrounding flavour you want; only the `P` glyph is
+# required (it becomes the entry arch).
+#######################################################################
+
+NAME:   resonance_forge_portal_entry
+TAGS:   portal_entry resonance_forge
+KFEAT:  P = enter_forge
+FTILE:  P = floor_marble
+COLOUR: P = lightblue
+
+
+MAP
+...
+.P.
+...
+ENDMAP
+
+lua {{
+    return resonance_forge_portal_entry(_G)
+}}
+
+#######################################################################
+# Resonance Forge encompass map
+#
+# This is scaffolding so gameplay/Lua hooks can be tested before the
+# final layout is drawn. Replace the MAP block below with the actual
+# forge level; keep the glyph responsibilities in sync so the Lua logic
+# keeps functioning:
+#   - `F` becomes the active forge dais
+#   - `E` is the exit gate back to the dungeon
+#   - `a` tiles provide the forge's anchor point (forgewright spawns)
+#   - `o` / `i` mark outer/inner guardian spawn slots
+#   - Digits/letters listed in `LOOT_GLYPHS` will be populated by Lua
+#     with resonance forge loot (via resonance_forge_place_loot)
+#######################################################################
+
+default-depth: ResForge
+
+NAME:   resonance_forge_foundry
+ORIENT: encompass
+TAGS:   resonance_forge no_rotate no_hmirror no_vmirror
+WEIGHT: 1
+PLACE:  ResForge
+# manual testing only until branch hooks land
+
+# Forge encompass glyphs
+KFEAT:  F = resonance_forge
+
+KFEAT:  E = exit_forge
+MARKER: e = lua:resonance_forge_spawn_marker { resonance_forge_spawn = "entry" }
+MARKER: e = lua:resonance_forge_entry_marker()
+KFEAT:  e = exit_forge
+
+KFEAT:  D = closed_door
+TILE:   F = dngn_resonance_forge
+: set_feature_name("closed_door", "iron door")
+: set_feature_name("metal_statue", "iron statue")
+
+MARKER: a = lua:resonance_forge_spawn_marker { resonance_forge_anchor = "forge" }
+MARKER: o = lua:resonance_forge_spawn_marker { resonance_forge_spawn = "outer" }
+MARKER: i = lua:resonance_forge_spawn_marker { resonance_forge_spawn = "inner" }
+MARKER: c = lua:resonance_forge_spawn_marker { resonance_forge_conduit = "spire" }
+MARKER: s = lua:resonance_forge_spawn_marker { resonance_forge_statue = "hazard" }
+MARKER: g = lua:resonance_forge_spawn_marker { resonance_forge_guard = "slot" }
+
+KFEAT:  S = granite_statue
+KFEAT:  O = metal_statue
+KFEAT:  a = floor
+KFEAT:  o = floor
+KFEAT:  i = floor
+KFEAT:  c = floor
+KFEAT:  s = floor
+KFEAT:  g = floor
+
+
+# WIP layout scaffolding – replace the MAP body as needed
+MAP
+                  #######
+                  #.....#
+                  #..E..#
+                  #.....#
+                  ##xDx##
+                    x.x
+             #######xDx#######
+             #g.iiOii.iiOii.g#
+             #...g......g....#
+             #..g.acaFaca.g..#
+             #...............#
+             #.....OxxxO.....#
+             #......ooo......#
+##########   #oo.o.oo.oo.o.oo#   ##########
+#g.......###xxxxxxxxO.Oxxxxxxxx###.......g#
+#...s.................................s...#
+#g.......#########################.......g#
+####.#####                       #####.####
+   #.#                               #.#
+   #.#     #####           #####     #.#
+   #.#######...#           #...#######.#
+   #...........# ######### #...........#
+   #.#######...# #S.....S# #...#######.#
+####.####  #xDx# #...e...# #xDx#  ####.####
+#.....gg#   xgxxxx.......xxxxgx   #gg.....#
+#...S...#   x.................x   #...S...#
+#g......#   x#####...O...#####x   #......g#
+#.g.....#        #S.....S#        #.....g.#
+#..g....#        #########        #....g..#
+#.g.g...#                         #...g.g.#
+#########                         #########
+ENDMAP
+
+lua {{
+    local target = resonance_forge_random_target()
+    resonance_forge_setup(_G, target)
+    resonance_forge_place_loot(_G, "12")
+}}

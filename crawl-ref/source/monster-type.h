@@ -158,6 +158,9 @@ enum monster_type                      // env.mons[].type
 #if TAG_MAJOR_VERSION == 34
     MONS_BROWN_OOZE,
 #endif
+#if TAG_MAJOR_VERSION == 34
+    MONS_GIANT_AMOEBA,
+#endif
     MONS_COLOSSAL_AMOEBA,
 #if TAG_MAJOR_VERSION > 34
     MONS_MORPHOGENIC_OOZE,
@@ -448,6 +451,9 @@ enum monster_type                      // env.mons[].type
     MONS_ORC_APOSTLE,
 #endif
     MONS_DWARF,
+#if TAG_MAJOR_VERSION >= 34
+    MONS_RESONANCE_FORGEWRIGHT,
+#endif
     MONS_DEEP_DWARF,
 #if TAG_MAJOR_VERSION == 34
     MONS_DEEP_DWARF_SCION,
@@ -1411,6 +1417,8 @@ enum monster_type                      // env.mons[].type
     MONS_NASCENT_PLASMODIUM,
     MONS_STAR_JELLY,
 #endif
+
+    MONS_COGLIN_DUELIST,
 
     NUM_MONSTERS,               // used for polymorph
 

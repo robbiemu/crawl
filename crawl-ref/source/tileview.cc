@@ -291,6 +291,11 @@ void tile_default_flv(branch_type br, tile_flavour &flv)
         flv.floor = TILE_FLOOR_NORMAL;
         return;
 
+    case BRANCH_RESONANCE_FORGE:
+        flv.wall  = TILE_WALL_BRICK_BROWN;
+        flv.floor = TILE_FLOOR_COBBLE_BLOOD;
+        return;
+
     case BRANCH_DESOLATION:
         flv.floor = TILE_FLOOR_SALT;
         flv.wall = TILE_WALL_DESOLATION;

@@ -1145,6 +1145,11 @@ POP_DEPTHS,
 { // Wizlab
 },
 
+#if TAG_MAJOR_VERSION >= 34
+{ // Resonance Forge
+},
+#endif
+
 #if TAG_MAJOR_VERSION == 34
 POP_DEPTHS,
 #endif
@@ -1331,6 +1336,9 @@ static const vector<pop_entry> population_water[] =
     GENERIC_WATER_POP, // IceCv
     GENERIC_WATER_POP, // Volcano
     GENERIC_WATER_POP, // WizLab
+#if TAG_MAJOR_VERSION >= 34
+    GENERIC_WATER_POP, // Resonance Forge
+#endif
 #if TAG_MAJOR_VERSION == 34
     DEPTHS_WATER_POP,
 #endif
@@ -1435,6 +1443,9 @@ static const vector<pop_entry> population_lava[] =
     GENERIC_LAVA_POP, // IceCv
     GENERIC_LAVA_POP, // Volcano
     GENERIC_LAVA_POP, // WizLab
+#if TAG_MAJOR_VERSION >= 34
+    GENERIC_LAVA_POP, // Resonance Forge
+#endif
 #if TAG_MAJOR_VERSION == 34
     DEPTHS_LAVA_POP,
 #endif

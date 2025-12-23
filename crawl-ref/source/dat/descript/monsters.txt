@@ -1362,6 +1362,12 @@ dwarf
 
 A member of a short, sturdy mountain-dwelling folk.
 %%%%
+resonance forgewright
+
+A dour dwarf artisan who has mastered the art of resonance forging. Each swing
+of their hammer threatens to awaken slumbering constructs or to summon blazing
+creations of metal and lightning.
+%%%%
 earth elemental
 
 A spirit drawn from the elemental plane of earth. It exists in this world as a

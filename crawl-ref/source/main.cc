@@ -1347,7 +1347,7 @@ static void _input()
 static bool _can_take_stairs(dungeon_feature_type ftype, bool down,
                              bool known_shaft)
 {
-    // Up and down both work for shops, portals, and altars.
+    // Up and down both work for shops, portals, altars, and resonance forges.
     if (ftype == DNGN_ENTER_SHOP || feat_is_altar(ftype))
     {
         if (crawl_state.doing_prev_cmd_again)
@@ -1364,6 +1364,12 @@ static bool _can_take_stairs(dungeon_feature_type ftype, bool down,
             try_god_conversion(feat_altar_god(ftype));
         // Even though we may have "succeeded", return false so we don't keep
         // trying to go downstairs.
+        return false;
+    }
+
+    if (ftype == DNGN_RESONANCE_FORGE || ftype == DNGN_RESONANCE_FORGE_SPENT)
+    {
+        dungeon_events.fire_position_event(DET_PLAYER_CLIMBS, you.pos());
         return false;
     }
 

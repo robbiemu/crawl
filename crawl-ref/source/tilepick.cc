@@ -378,6 +378,8 @@ tileidx_t tileidx_feature_base(dungeon_feature_type feat)
 #endif
     case DNGN_ENTER_TEMPLE:
         return TILE_DNGN_ENTER_TEMPLE;
+    case DNGN_ENTER_RESONANCE_FORGE:
+        return TILE_DNGN_PORTAL_RESONANCE_FORGE;
     case DNGN_ENTER_ORC:
         return TILE_DNGN_ENTER_ORC;
     case DNGN_ENTER_ELF:
@@ -437,6 +439,8 @@ tileidx_t tileidx_feature_base(dungeon_feature_type feat)
 #endif
     case DNGN_EXIT_TEMPLE:
         return TILE_DNGN_EXIT_TEMPLE;
+    case DNGN_EXIT_RESONANCE_FORGE:
+        return TILE_DNGN_EXIT_RESONANCE_FORGE;
     case DNGN_EXIT_ORC:
         return TILE_DNGN_EXIT_ORC;
     case DNGN_EXIT_ELF:
@@ -4710,6 +4714,8 @@ tileidx_t tileidx_branch(const branch_type br)
         return TILE_DNGN_PORTAL_VOLCANO;
     case BRANCH_WIZLAB:
         return TILE_DNGN_PORTAL_WIZARD_LAB_7; /* I like this colour */
+    case BRANCH_RESONANCE_FORGE:
+        return TILE_DNGN_PORTAL_RESONANCE_FORGE;
     case BRANCH_DESOLATION:
         return TILE_DNGN_PORTAL_DESOLATION;
     case BRANCH_ARENA:

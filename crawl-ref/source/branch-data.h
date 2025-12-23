@@ -371,8 +371,26 @@ const Branch branches[NUM_BRANCHES] =
 #if TAG_MAJOR_VERSION > 34
       '9', {}, branch_noise::normal, DEFAULT_MON_DIE_SIZE,
       {} },
+
+    { BRANCH_RESONANCE_FORGE, NUM_BRANCHES, -1, -1, 1, 20,
+      brflag::no_x_level_travel | brflag::no_items,
+      DNGN_ENTER_RESONANCE_FORGE, DNGN_EXIT_RESONANCE_FORGE, NUM_FEATURES,
+      "Resonance Forge", "a Resonance Forge", "ResForge",
+      "You step into a humming Resonance Forge!",
+      LIGHTGREY, LIGHTBLUE,
+      '&', {}, branch_noise::loud, DEFAULT_MON_DIE_SIZE,
+      {} },
 #endif
 #if TAG_MAJOR_VERSION == 34
+
+    { BRANCH_RESONANCE_FORGE, NUM_BRANCHES, -1, -1, 1, 20,
+      brflag::no_x_level_travel | brflag::no_items,
+      DNGN_ENTER_RESONANCE_FORGE, DNGN_EXIT_RESONANCE_FORGE, NUM_FEATURES,
+      "Resonance Forge", "a Resonance Forge", "ResForge",
+      "You step into a humming Resonance Forge!",
+      LIGHTGREY, LIGHTBLUE,
+      '&', {}, branch_noise::loud, DEFAULT_MON_DIE_SIZE,
+      {} },
 
     { BRANCH_DEPTHS, BRANCH_DUNGEON, 15, 15, 4, 22,
       brflag::none,

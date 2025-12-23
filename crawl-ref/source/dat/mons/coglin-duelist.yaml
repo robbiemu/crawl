@@ -1,0 +1,21 @@
+name: "coglin duelist"
+glyph: {char: "p", colour: yellow}
+tile: goblin
+corpse_tile: goblin
+flags: [fighter, speaks, warm_blood, two_weapons]
+exp: 210
+will: 30
+attacks:
+ - {type: hit, damage: 12}
+ - {type: hit, damage: 12}
+hd: 7
+hp_10x: 360
+ac: 4
+ev: 14
+has_corpse: true
+shout: shout
+intelligence: human
+uses: weapons_armour
+size: medium
+shape: humanoid
+tile_variance: mod

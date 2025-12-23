@@ -6,3 +6,6 @@
 *.sublime-workspace
 *.sublime-project
 games.d/
+
+.crawl
+*.tmp
