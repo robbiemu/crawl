@@ -160,6 +160,7 @@ local resolve_tier_entry_key
 local apply_pairings_to_roll
 local last_guard_error
 local guard_failure_reported
+local drop_roll_items
 local WANDER_BEHAVIOUR = mons and mons.behaviour and mons.behaviour("wander") or nil
 
 local FORGE_STRAIN_WARNINGS = {
@@ -302,17 +303,17 @@ local function weighted_index(entries, tried)
 end
 
 local function awaken_guardian(mon)
-    if mon and WANDER_BEHAVIOUR then
-        mon.beh = WANDER_BEHAVIOUR
-    end
     return mon
 end
 
-local function place_guardian(x, y, spec)
+local function place_guardian(x, y, spec, roll)
     if not spec or spec == "" then
         return nil
     end
     local mon = dgn.create_monster(x, y, spec)
+    if mon and roll then
+        drop_roll_items(x, y, roll)
+    end
     return awaken_guardian(mon)
 end
 
@@ -466,6 +467,21 @@ local function guard_roll_items(roll)
         table.insert(items, item)
     end
     return items
+end
+
+drop_roll_items = function(x, y, roll)
+    if not roll or not roll.no_equip then
+        return
+    end
+    for _, item in ipairs(guard_roll_items(roll)) do
+        if item.base and item.base ~= "nothing" then
+            local spec = item.desc or item.base
+            if not spec:find("no_pickup") then
+                spec = spec .. " no_pickup"
+            end
+            dgn.create_item(x, y, spec)
+        end
+    end
 end
 
 local function parse_category_type(value)
@@ -760,6 +776,88 @@ local function build_support_guard_roll(bucket_name, target, tier_name, tier_dat
         end
     end
     local tried = {}
+    local forced_species = opts and opts.support_species
+    if forced_species then
+        forced_species = forced_species:lower()
+    end
+
+    local function attempt_entry(entry)
+        if not entry then
+            return nil
+        end
+        if entry.conditions and not conditions_match(entry.conditions, {
+            target = target,
+            type = entry.type or entry.creature,
+            species = entry.species,
+        }) then
+            return nil
+        end
+        if entry.source then
+            local category, tier = parse_category_type(entry.source)
+            if category then
+                local forced_type = entry.type
+                if not forced_type and entry.species then
+                    forced_type = entry.species:gsub(" ", "_")
+                end
+                local roll = build_guard_roll(bucket_name, category, {
+                    tier = tier,
+                    type = forced_type,
+                    species_override = entry.species,
+                    skip_unique = opts and opts.skip_unique,
+                    no_equip = opts and opts.no_equip,
+                    support_species = opts and opts.support_species,
+                }, depth + 1)
+                if roll then
+                    return roll
+                end
+            end
+            return nil
+        end
+        local roll = {
+            bucket = bucket_name,
+            target = target,
+            tier = tier_name,
+            type = entry.type or (entry.species and entry.species:gsub(" ", "_")),
+            species = entry.species or type_to_species(entry.type),
+            extra_items = {},
+        }
+        roll.no_equip = opts and opts.no_equip or false
+        add_entry_items_to_roll(roll, entry, nil, nil)
+        if not roll.main_item then
+            local scale_name = DRAGON_SCALE_DROPS[roll.species]
+            if scale_name then
+                local scale_item = build_item(scale_name, {
+                    entry_tags = entry.tags,
+                    entry_tag_rate = entry.tag_rate,
+                })
+                if scale_item then
+                    table.insert(roll.extra_items, scale_item)
+                end
+                roll.main_item = { base = "nothing", desc = "nothing" }
+            end
+        end
+        if not roll.main_item then
+            roll.main_item = build_item(DEFAULT_TARGET_ITEMS[target] or "nothing")
+        end
+        if roll.main_item then
+            return roll
+        end
+        return nil
+    end
+
+    if forced_species then
+        for idx, entry in ipairs(entries) do
+            local species = entry.species and entry.species:lower()
+            if species == forced_species then
+                local roll = attempt_entry(entry)
+                if roll then
+                    return roll
+                end
+                tried[idx] = true
+                break
+            end
+        end
+    end
 
     while true do
         local idx = weighted_index(entries, tried)
@@ -767,60 +865,9 @@ local function build_support_guard_roll(bucket_name, target, tier_name, tier_dat
             break
         end
         tried[idx] = true
-        local entry = entries[idx]
-        -- Try each support guard option until one yields a valid roll.
-        if not (entry.conditions and not conditions_match(entry.conditions, {
-            target = target,
-            type = entry.type or entry.creature,
-            species = entry.species,
-        })) then
-            if entry.source then
-                local category, tier = parse_category_type(entry.source)
-                if category then
-                    local forced_type = entry.type
-                    if not forced_type and entry.species then
-                        forced_type = entry.species:gsub(" ", "_")
-                    end
-                    local roll = build_guard_roll(bucket_name, category, {
-                        tier = tier,
-                        type = forced_type,
-                        species_override = entry.species,
-                        skip_unique = opts and opts.skip_unique,
-                    }, depth + 1)
-                    if roll then
-                        return roll
-                    end
-                end
-            else
-                local roll = {
-                    bucket = bucket_name,
-                    target = target,
-                    tier = tier_name,
-                    type = entry.type or (entry.species and entry.species:gsub(" ", "_")),
-                    species = entry.species or type_to_species(entry.type),
-                    extra_items = {},
-                }
-                add_entry_items_to_roll(roll, entry, nil, nil)
-                if not roll.main_item then
-                    local scale_name = DRAGON_SCALE_DROPS[roll.species]
-                    if scale_name then
-                        local scale_item = build_item(scale_name, {
-                            entry_tags = entry.tags,
-                            entry_tag_rate = entry.tag_rate,
-                        })
-                        if scale_item then
-                            table.insert(roll.extra_items, scale_item)
-                        end
-                        roll.main_item = { base = "nothing", desc = "nothing" }
-                    end
-                end
-                if not roll.main_item then
-                    roll.main_item = build_item(DEFAULT_TARGET_ITEMS[target] or "nothing")
-                end
-                if roll.main_item then
-                    return roll
-                end
-            end
+        local roll = attempt_entry(entries[idx])
+        if roll then
+            return roll
         end
     end
 
@@ -924,7 +971,15 @@ build_guard_roll = function(bucket_name, target, opts, depth)
         end
         return nil
     end
-    local type_key = opts.type or select_creature_type(category_spec, tier_data)
+    local support_species = opts.support_species
+    local type_key = opts.type
+    if not type_key then
+        if support_species then
+            type_key = "support_guards"
+        else
+            type_key = select_creature_type(category_spec, tier_data)
+        end
+    end
     if not type_key then
         if depth == 0 then
             last_guard_error = "creature distribution missing"
@@ -971,6 +1026,7 @@ build_guard_roll = function(bucket_name, target, opts, depth)
         species = opts.species_override or entry.species or type_to_species(entry_key),
         extra_items = {},
     }
+    roll.no_equip = opts.no_equip or false
 
     add_entry_items_to_roll(roll, entry, tier_data.tags, tier_data.tag_rate)
     if not opts.ignore_pairings then
@@ -1037,16 +1093,24 @@ local function random_choice(list)
     return list[idx]
 end
 
-local function choose_common_guard(bucket, target, forced_type)
-    local opts
-    if forced_type then
-        opts = { type = forced_type }
+local function choose_common_guard(bucket, target, opts)
+    if type(opts) == "string" then
+        opts = { type = opts }
+    elseif opts == nil then
+        opts = {}
     end
     local roll = build_guard_roll(bucket, target, opts)
     if roll then
-        local spec = guard_roll_to_string(roll)
+        roll.no_equip = opts.no_equip or false
+        local spec
+        if roll.no_equip then
+            spec = roll.species or type_to_species(roll.type)
+        end
+        if not spec or spec == "" then
+            spec = guard_roll_to_string(roll)
+        end
         if spec then
-            return spec
+            return spec, roll
         end
         debug_guard_failure(bucket, target, "roll_to_string_failed")
     else
@@ -1061,7 +1125,7 @@ local function choose_common_guard(bucket, target, forced_type)
     end
     local species = random_choice(ENTRY_GUARD_DEFAULT) or "human"
     local item = DEFAULT_TARGET_ITEMS[target] or "hand axe"
-    return string.format("%s ; %s", species, item)
+    return string.format("%s ; %s", species, item), nil
 end
 
 local function weighted_choice(pools, weights)
@@ -1130,14 +1194,23 @@ local function choose_guard_spec(bucket, target)
     if bucket and crawl.random2(100) < GOLEM_CHANCE then
         local golem = choose_golem_guard(bucket, target)
         if golem then
-            return golem
+            return golem, nil
         end
     end
     if bucket and GARGOYLE_GUARDS[bucket] and crawl.random2(100) < GARGOYLE_CHANCE then
-        return choose_gargoyle_guard(bucket)
+        local garg = choose_gargoyle_guard(bucket)
+        if garg then
+            return garg, nil
+        end
     end
     if STEAM_BUCKETS[bucket] and crawl.random2(100) < STEAM_CHANCE then
-        return "steam dragon"
+        local spec, roll = choose_common_guard(bucket, target, {
+            support_species = "steam dragon",
+            no_equip = true,
+        })
+        if spec then
+            return spec, roll
+        end
     end
     return choose_common_guard(bucket, target)
 end
@@ -1297,6 +1370,7 @@ local function apply_abyss_replacements(spawns, bucket)
             end
             if abyss_mon and abyss_mon ~= "" then
                 spawn.monster = abyss_mon
+                spawn.roll = nil
             end
         end
     end
@@ -1345,12 +1419,15 @@ local function spawn_wave_monsters(branch, depth, bucket, key, opts)
         if not passed then
             goto continue
         end
+        local mon_spec, mon_roll
         local mon = crawl.random_monster(branch, depth)
         if not mon or mon == "" then
-            mon = choose_common_guard(bucket, "weapon")
+            mon_spec, mon_roll = choose_common_guard(bucket, "weapon")
+        else
+            mon_spec = mon
         end
-        if mon and mon ~= "" then
-            table.insert(selected, { pos = pos, monster = mon })
+        if mon_spec and mon_spec ~= "" then
+            table.insert(selected, { pos = pos, monster = mon_spec, roll = mon_roll })
         end
         ::continue::
     end
@@ -1358,7 +1435,7 @@ local function spawn_wave_monsters(branch, depth, bucket, key, opts)
         apply_abyss_replacements(selected, bucket)
     end
     for _, spawn in ipairs(selected) do
-        place_guardian(spawn.pos.x, spawn.pos.y, spawn.monster)
+        place_guardian(spawn.pos.x, spawn.pos.y, spawn.monster, spawn.roll)
     end
 end
 
@@ -1474,9 +1551,9 @@ local function spawn_initial_guards(target, bucket)
     bucket = bucket or bucket_name() or BUCKETS.mid.name
     shuffle(guard_slots)
     for _, pos in ipairs(guard_slots) do
-        local spec = choose_guard_spec(bucket, target)
+        local spec, roll = choose_guard_spec(bucket, target)
         if spec then
-            dgn.create_monster(pos.x, pos.y, spec)
+            place_guardian(pos.x, pos.y, spec, roll)
         end
     end
 end
@@ -1610,14 +1687,6 @@ function ResonanceForgeMarker:event(marker, ev)
         or dgn.persist.resonance_forge_depth or BUCKETS.mid.depth[1]
     local next_use = (self.props.uses or 0) + 1
     local preview_branch, preview_depth, depth_catastrophe = wave_place(base_depth, next_use)
-    if depth_catastrophe then
-        crawl.mpr("<lightred>The forge convulses as it strains past the Depths and ruptures catastrophically!</lightred>")
-        self.props.uses = next_use
-        self.props.ruptured = true
-        resonance_forge_spawn_wave(self, preview_branch, preview_depth, { catastrophic = true })
-        maybe_spawn_failure_cloud(marker)
-        return true
-    end
     local success, msg, spawn_wave = crawl.resonance_forge_apply(target)
     if msg and msg ~= "" then
         crawl.mpr(msg)
@@ -1625,9 +1694,17 @@ function ResonanceForgeMarker:event(marker, ev)
     if not success then
         return true
     end
-    self.props.uses = next_use
+    if spawn_wave and depth_catastrophe then
+        crawl.mpr("<lightred>The forge convulses as it strains past the Depths and ruptures catastrophically!</lightred>")
+        self.props.uses = next_use
+        self.props.ruptured = true
+        resonance_forge_spawn_wave(self, preview_branch, preview_depth, { catastrophic = true })
+        maybe_spawn_failure_cloud(marker)
+        return true
+    end
     local rupture_now = crawl.one_chance_in(3)
     if spawn_wave then
+        self.props.uses = next_use
         resonance_forge_spawn_wave(self, preview_branch, preview_depth, {
             catastrophic = rupture_now,
         })
@@ -1637,7 +1714,9 @@ function ResonanceForgeMarker:event(marker, ev)
         self.props.ruptured = true
         maybe_spawn_failure_cloud(marker)
     else
-        warn_forge_strain()
+        if spawn_wave then
+            warn_forge_strain()
+        end
     end
     return true
 end

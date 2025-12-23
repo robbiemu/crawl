@@ -48,7 +48,6 @@ ORIENT: encompass
 TAGS:   resonance_forge no_rotate no_hmirror no_vmirror
 WEIGHT: 1
 PLACE:  ResForge
-# manual testing only until branch hooks land
 
 # Forge encompass glyphs
 KFEAT:  F = resonance_forge
@@ -79,8 +78,6 @@ KFEAT:  c = floor
 KFEAT:  s = floor
 KFEAT:  g = floor
 
-
-# WIP layout scaffolding – replace the MAP body as needed
 MAP
                   #######
                   #.....#

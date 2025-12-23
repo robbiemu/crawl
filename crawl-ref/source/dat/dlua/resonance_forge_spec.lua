@@ -348,7 +348,7 @@ local function build_resonance_spec_tables()
         },
         uncommon = {
           human = {
-            "chain armour",
+            "chain mail",
             "scale mail"
           },
           dwarf = {
@@ -390,7 +390,7 @@ local function build_resonance_spec_tables()
             {
               {
                 type = "nothing",
-                weight = 50
+                weight = 40
               },
               {
                 type = "weapon.common",
@@ -402,11 +402,11 @@ local function build_resonance_spec_tables()
               },
               {
                 type = "ranged.common",
-                weight = 5
+                weight = 10
               },
               {
                 type = "thrown.common",
-                weight = 5
+                weight = 10
               }
             }
           }
@@ -1678,7 +1678,7 @@ local function build_resonance_spec_tables()
         },
         uncommon = {
           human = {
-            "chain armour",
+            "chain mail",
             "scale mail"
           },
           dwarf = {
@@ -1757,7 +1757,7 @@ local function build_resonance_spec_tables()
             {
               {
                 type = "nothing",
-                weight = 40
+                weight = 30
               },
               {
                 type = "weapon.common",
@@ -1769,11 +1769,11 @@ local function build_resonance_spec_tables()
               },
               {
                 type = "ranged.common",
-                weight = 10
+                weight = 15
               },
               {
                 type = "thrown.common",
-                weight = 5
+                weight = 10
               }
             }
           }
@@ -3326,7 +3326,7 @@ local function build_resonance_spec_tables()
         },
         uncommon = {
           human = {
-            "chain armour",
+            "chain mail",
             "scale mail"
           },
           dwarf_body = {
@@ -3397,11 +3397,11 @@ local function build_resonance_spec_tables()
             {
               {
                 type = "nothing",
-                weight = 40
+                weight = 20
               },
               {
                 type = "weapon.common",
-                weight = 30
+                weight = 40
               },
               {
                 type = "shield.common",
@@ -3409,11 +3409,11 @@ local function build_resonance_spec_tables()
               },
               {
                 type = "ranged.common",
-                weight = 10
+                weight = 15
               },
               {
                 type = "thrown.common",
-                weight = 5
+                weight = 10
               }
             }
           }

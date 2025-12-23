@@ -200,7 +200,7 @@ string _forge_focus_name(resonance_forge_target target)
     {
     case resonance_forge_target::weapon:  return "weapon";
     case resonance_forge_target::ranged:  return "ranged weapon";
-    case resonance_forge_target::armour:  return "suit of armour";
+    case resonance_forge_target::armour:  return "armour";
     case resonance_forge_target::shield:  return "shield";
     case resonance_forge_target::offhand: return "off-hand weapon";
     case resonance_forge_target::thrown:  return "throwing ammunition";
@@ -366,6 +366,7 @@ bool resonance_forge_apply(resonance_forge_target target, string &message,
         _rebrand_melee(*weapon);
         const string new_name = _item_desc(*weapon);
         _announce_success(old_name, new_name);
+        you.gear_change = true;
         return true;
     }
     case resonance_forge_target::ranged:
@@ -383,6 +384,7 @@ bool resonance_forge_apply(resonance_forge_target target, string &message,
         _rebrand_melee(*weapon);
         const string new_name = _item_desc(*weapon);
         _announce_success(old_name, new_name);
+        you.gear_change = true;
         return true;
     }
     case resonance_forge_target::armour:
@@ -403,6 +405,7 @@ bool resonance_forge_apply(resonance_forge_target target, string &message,
         _announce_success(old_name, new_name);
         you.redraw_armour_class = true;
         you.redraw_evasion = true;
+        you.gear_change = true;
         return true;
     }
     case resonance_forge_target::shield:
@@ -422,6 +425,7 @@ bool resonance_forge_apply(resonance_forge_target target, string &message,
         _announce_success(old_name, new_name);
         you.redraw_armour_class = true;
         you.redraw_evasion = true;
+        you.gear_change = true;
         return true;
     }
     case resonance_forge_target::offhand:
@@ -439,6 +443,7 @@ bool resonance_forge_apply(resonance_forge_target target, string &message,
         _rebrand_melee(*offhand);
         const string new_name = _item_desc(*offhand);
         _announce_success(old_name, new_name);
+        you.gear_change = true;
         return true;
     }
     case resonance_forge_target::thrown:
@@ -457,6 +462,7 @@ bool resonance_forge_apply(resonance_forge_target target, string &message,
         const string new_name = _item_desc(*ammo);
         _announce_success(old_name, new_name);
         quiver::set_needs_redraw();
+        you.gear_change = true;
         return true;
     }
     }
