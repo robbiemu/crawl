@@ -121,7 +121,11 @@ local function build_resonance_spec_tables()
           dwarf = {
             {
               base = "war axe",
-              weight = 43
+              weight = 23
+            },
+            {
+              base = "mace tile:wpn_hammer wtile:hammer itemname:hammer",
+              weight = 20
             },
             {
               base = "mace",
@@ -178,7 +182,7 @@ local function build_resonance_spec_tables()
             "ego:electrocution",
             "ego:heavy"
           },
-          tag_rate = 0.5,
+          tag_rate = 0.33,
           pairings = {
             {
               {
@@ -215,7 +219,6 @@ local function build_resonance_spec_tables()
             "war axe",
             "battleaxe",
             "great mace",
-            "whip",
             "executioner's axe",
             "morningstar"
           },
@@ -247,7 +250,7 @@ local function build_resonance_spec_tables()
             "ego:electrocution",
             "ego:heavy"
           },
-          tag_rate = 1.0,
+          tag_rate = 0.9,
           pairings = {
             {
               {
@@ -359,7 +362,7 @@ local function build_resonance_spec_tables()
             "ego:resonance",
             "ego:ponderousness"
           },
-          tag_rate = 0.5,
+          tag_rate = 0.33,
           pairings = {
             {
               {
@@ -372,7 +375,7 @@ local function build_resonance_spec_tables()
                 tags = {
                   {
                     tag = "ego:corrosion_resistance",
-                    rate = 0.5
+                    rate = 0.33
                   }
                 }
               },
@@ -382,7 +385,7 @@ local function build_resonance_spec_tables()
                 tags = {
                   {
                     tag = "ego:repulsion",
-                    rate = 0.5
+                    rate = 0.33
                   }
                 }
               }
@@ -468,7 +471,7 @@ local function build_resonance_spec_tables()
               }
             }
           },
-          tag_rate = 1.0,
+          tag_rate = 0.9,
           tags = {
             "randart"
           },
@@ -559,18 +562,22 @@ local function build_resonance_spec_tables()
         common = {
           human = {
             {
-              base = "buckler"
+              base = "kite shield",
+              weight = 70
             },
             {
-              base = "kite shield"
+              base = "tower shield",
+              weight = 30
             }
           },
           dwarf = {
             {
-              base = "kite shield"
+              base = "kite shield",
+              weight = 30
             },
             {
-              base = "tower shield"
+              base = "buckler",
+              weight = 70
             }
           },
           support_guards = {
@@ -582,14 +589,26 @@ local function build_resonance_spec_tables()
         },
         uncommon = {
           human = {
-            "buckler",
-            "kite shield"
+            {
+              base = "kite shield",
+              weight = 70
+            },
+            {
+              base = "tower shield",
+              weight = 30
+            }
           },
           dwarf = {
-            "kite shield",
-            "tower shield"
+            {
+              base = "kite shield",
+              weight = 30
+            },
+            {
+              base = "buckler",
+              weight = 70
+            }
           },
-          tag_rate = 0.5,
+          tag_rate = 0.33,
           tags = {
             "ego:reflection"
           },
@@ -634,12 +653,24 @@ local function build_resonance_spec_tables()
         },
         rare = {
           human = {
-            "buckler",
-            "kite shield"
+            {
+              base = "kite shield",
+              weight = 70
+            },
+            {
+              base = "tower shield",
+              weight = 30
+            }
           },
           dwarf = {
-            "kite shield",
-            "tower shield"
+            {
+              base = "kite shield",
+              weight = 30
+            },
+            {
+              base = "buckler",
+              weight = 70
+            }
           },
           support_guards = {
             {
@@ -663,7 +694,7 @@ local function build_resonance_spec_tables()
               tag_rate = 0.33
             }
           },
-          tag_rate = 1.0,
+          tag_rate = 0.9,
           tags = {
             "randart",
             "ego:reflection"
@@ -680,7 +711,7 @@ local function build_resonance_spec_tables()
                 tags = {
                   {
                     tag = "ego:corrosion_resistance",
-                    rate = 0.5
+                    rate = 0.33
                   }
                 }
               },
@@ -690,7 +721,7 @@ local function build_resonance_spec_tables()
                 tags = {
                   {
                     tag = "ego:repulsion",
-                    rate = 0.5
+                    rate = 0.33
                   }
                 }
               }
@@ -837,7 +868,7 @@ local function build_resonance_spec_tables()
                   "dagger"
                 },
                 {
-                  "hammer",
+                  "mace tile:wpn_hammer wtile:hammer itemname:hammer",
                   "mace"
                 },
                 {
@@ -851,7 +882,7 @@ local function build_resonance_spec_tables()
             "ego:speed",
             "ego:electrocution"
           },
-          tag_rate = 0.5,
+          tag_rate = 0.33,
           pairings = {
             {
               {
@@ -891,14 +922,10 @@ local function build_resonance_spec_tables()
                 },
                 {
                   "quick blade",
-                  "quick blade"
-                },
-                {
-                  "quick blade",
                   "dagger"
                 },
                 {
-                  "hammer",
+                  "mace tile:wpn_hammer wtile:hammer itemname:hammer",
                   "mace"
                 },
                 {
@@ -931,9 +958,15 @@ local function build_resonance_spec_tables()
             },
             {
               species = "two-headed ogre",
-              base = {
-                "giant club, giant club",
-                "giant spiked club, giant club"
+              pairs = {
+                {
+                  "giant club",
+                  "giant club"
+                },
+                {
+                  "giant spiked club",
+                  "giant club"
+                }
               },
               tags = {
                 "randart",
@@ -946,7 +979,7 @@ local function build_resonance_spec_tables()
             "ego:speed",
             "ego:electrocution"
           },
-          tag_rate = 1.0,
+          tag_rate = 0.9,
           pairings = {
             {
               {
@@ -1041,15 +1074,21 @@ local function build_resonance_spec_tables()
             "shortbow"
           },
           dwarf = {
-            "hand cannon",
-            "arbalest"
+            {
+              base = "hand cannon",
+              weight = 10
+            },
+            {
+              base = "arbalest",
+              weight = 90
+            }
           },
           tags = {
             "ego:heavy",
             "ego:speed",
             "ego:electrocution"
           },
-          tag_rate = 0.5,
+          tag_rate = 0.33,
           pairings = {
             {
               {
@@ -1081,8 +1120,14 @@ local function build_resonance_spec_tables()
             "shortbow"
           },
           dwarf = {
-            "hand cannon",
-            "arbalest"
+            {
+              base = "hand cannon",
+              weight = 20
+            },
+            {
+              base = "arbalest",
+              weight = 80
+            }
           },
           support_guards = {
             {
@@ -1111,7 +1156,7 @@ local function build_resonance_spec_tables()
             "ego:speed",
             "ego:electrocution"
           },
-          tag_rate = 1.0,
+          tag_rate = 0.9,
           pairings = {
             {
               {
@@ -1179,7 +1224,8 @@ local function build_resonance_spec_tables()
         common = {
           human = {
             {
-              base = "boomerang"
+              base = "boomerang",
+              qty = 1
             }
           },
           support_guards = {
@@ -1204,7 +1250,8 @@ local function build_resonance_spec_tables()
         uncommon = {
           human = {
             {
-              base = "boomerang"
+              base = "boomerang",
+              qty = 1
             }
           },
           merfolk = {
@@ -1282,7 +1329,7 @@ local function build_resonance_spec_tables()
           tags = {
             "ego:silver"
           },
-          tag_rate = 0.5,
+          tag_rate = 0.33,
           pairings = {
             {
               {
@@ -1392,6 +1439,7 @@ local function build_resonance_spec_tables()
             "war axe",
             "rapier",
             "dagger",
+            "mace tile:wpn_hammer wtile:hammer itemname:hammer",
             "halberd",
             "partisan"
           },
@@ -1400,6 +1448,7 @@ local function build_resonance_spec_tables()
             "war axe",
             "battleaxe",
             "great mace",
+            "mace tile:wpn_hammer wtile:hammer itemname:hammer",
             "whip"
           },
           support_guards = {
@@ -1455,7 +1504,7 @@ local function build_resonance_spec_tables()
               species = "gargoyle",
               base = {
                 "great mace",
-                "hammer"
+                "mace tile:wpn_hammer wtile:hammer itemname:hammer"
               },
               tags = {
                 "randart",
@@ -1474,7 +1523,7 @@ local function build_resonance_spec_tables()
             "ego:electrocution",
             "ego:heavy"
           },
-          tag_rate = 0.5,
+          tag_rate = 0.33,
           pairings = {
             {
               {
@@ -1538,7 +1587,7 @@ local function build_resonance_spec_tables()
               species = "gargoyle",
               base = {
                 "great mace",
-                "hammer"
+                "mace tile:wpn_hammer wtile:hammer itemname:hammer"
               },
               tags = {
                 "randart",
@@ -1560,9 +1609,11 @@ local function build_resonance_spec_tables()
             },
             {
               species = "two-headed ogre",
-              base = {
-                "giant club",
-                "giant spiked club"
+              pairs = {
+                {
+                  "giant club",
+                  "giant spiked club"
+                }
               },
               tags = {
                 "randart",
@@ -1577,7 +1628,7 @@ local function build_resonance_spec_tables()
             "ego:electrocution",
             "ego:heavy"
           },
-          tag_rate = 1.0,
+          tag_rate = 0.9,
           pairings = {
             {
               {
@@ -1667,11 +1718,45 @@ local function build_resonance_spec_tables()
               },
               {
                 base = "cloak",
-                weight = 45
+                weight = 45,
+                tags = {
+                  {
+                    tag = "ego:corrosion_resistance",
+                    rate = 0.33
+                  }
+                }
               },
               {
                 base = "scarf",
+                weight = 15,
+                tags = {
+                  {
+                    tag = "ego:repulsion",
+                    rate = 0.33
+                  }
+                }
+              }
+            },
+            {
+              {
+                type = "nothing",
+                weight = 30
+              },
+              {
+                type = "weapon.common",
+                weight = 30
+              },
+              {
+                type = "shield.common",
                 weight = 15
+              },
+              {
+                type = "ranged.common",
+                weight = 15
+              },
+              {
+                type = "thrown.common",
+                weight = 10
               }
             }
           }
@@ -1695,7 +1780,7 @@ local function build_resonance_spec_tables()
                 "randart",
                 "good_item"
               },
-              tag_rate = 0.5
+              tag_rate = 0.33
             },
             {
               species = "ogre",
@@ -1713,7 +1798,7 @@ local function build_resonance_spec_tables()
               species = "gargoyle",
               base = {
                 "great mace",
-                "hammer"
+                "mace tile:wpn_hammer wtile:hammer itemname:hammer"
               },
               tags = {
                 "good_item"
@@ -1726,7 +1811,7 @@ local function build_resonance_spec_tables()
             "ego:resonance",
             "ego:ponderousness"
           },
-          tag_rate = 0.5,
+          tag_rate = 0.33,
           pairings = {
             {
               {
@@ -1739,7 +1824,7 @@ local function build_resonance_spec_tables()
                 tags = {
                   {
                     tag = "ego:corrosion_resistance",
-                    rate = 0.5
+                    rate = 0.33
                   }
                 }
               },
@@ -1749,16 +1834,12 @@ local function build_resonance_spec_tables()
                 tags = {
                   {
                     tag = "ego:repulsion",
-                    rate = 0.5
+                    rate = 0.33
                   }
                 }
               }
             },
             {
-              {
-                type = "nothing",
-                weight = 30
-              },
               {
                 type = "weapon.common",
                 weight = 30
@@ -1817,13 +1898,13 @@ local function build_resonance_spec_tables()
                 "randart",
                 "good_item"
               },
-              tag_rate = 0.5
+              tag_rate = 0.33
             },
             {
               species = "gargoyle",
               base = {
                 "great mace",
-                "hammer"
+                "mace tile:wpn_hammer wtile:hammer itemname:hammer"
               },
               tags = {
                 "good_item"
@@ -1844,9 +1925,11 @@ local function build_resonance_spec_tables()
             },
             {
               species = "two-headed ogre",
-              base = {
-                "giant club",
-                "giant spiked club"
+              pairs = {
+                {
+                  "giant club",
+                  "giant spiked club"
+                }
               },
               tags = {
                 "randart",
@@ -1855,7 +1938,7 @@ local function build_resonance_spec_tables()
               tag_rate = 0.33
             }
           },
-          tag_rate = 1.0,
+          tag_rate = 0.9,
           tags = {
             "randart"
           },
@@ -1885,10 +1968,6 @@ local function build_resonance_spec_tables()
               }
             },
             {
-              {
-                type = "nothing",
-                weight = 200
-              },
               {
                 type = "weapon.common",
                 weight = 125
@@ -1935,18 +2014,23 @@ local function build_resonance_spec_tables()
         },
         common = {
           human = {
-            "buckler",
-            "kite shield",
-            "tower shield"
-          },
-          dwarf = {
             {
-              base = "tower shield",
+              base = "kite shield",
               weight = 70
             },
             {
+              base = "tower shield",
+              weight = 30
+            }
+          },
+          dwarf = {
+            {
               base = "kite shield",
               weight = 30
+            },
+            {
+              base = "buckler",
+              weight = 70
             }
           },
           support_guards = {
@@ -1954,59 +2038,7 @@ local function build_resonance_spec_tables()
               species = "coglin duelist",
               source = "offhand.common"
             }
-          }
-        },
-        uncommon = {
-          human = {
-            "kite shield",
-            "tower shield"
           },
-          dwarf = {
-            "tower shield",
-            "kite shield"
-          },
-          support_guards = {
-            {
-              species = "coglin duelist",
-              source = "offhand.uncommon"
-            },
-            {
-              species = "steam dragon",
-              tags = {
-                "randart",
-                "good_item"
-              },
-              tag_rate = 0.5
-            },
-            {
-              species = "gargoyle",
-              base = {
-                "great mace",
-                "hammer"
-              },
-              tags = {
-                "good_item"
-              },
-              tag_rate = 0.33
-            },
-            {
-              species = "ogre",
-              base = {
-                "giant club",
-                "giant spiked club"
-              },
-              tags = {
-                "randart",
-                "good_item"
-              },
-              tag_rate = 0.33
-            }
-          },
-          tags = {
-            "good_item",
-            "ego:reflection"
-          },
-          tag_rate = 0.5,
           pairings = {
             {
               {
@@ -2046,14 +2078,124 @@ local function build_resonance_spec_tables()
             }
           }
         },
-        rare = {
+        uncommon = {
           human = {
-            "kite shield",
-            "tower shield"
+            {
+              base = "kite shield",
+              weight = 70
+            },
+            {
+              base = "tower shield",
+              weight = 30
+            }
           },
           dwarf = {
-            "tower shield",
-            "kite shield"
+            {
+              base = "kite shield",
+              weight = 30
+            },
+            {
+              base = "buckler",
+              weight = 70
+            }
+          },
+          support_guards = {
+            {
+              species = "coglin duelist",
+              source = "offhand.uncommon"
+            },
+            {
+              species = "steam dragon",
+              tags = {
+                "randart",
+                "good_item"
+              },
+              tag_rate = 0.33
+            },
+            {
+              species = "gargoyle",
+              base = {
+                "great mace",
+                "mace tile:wpn_hammer wtile:hammer itemname:hammer"
+              },
+              tags = {
+                "good_item"
+              },
+              tag_rate = 0.33
+            },
+            {
+              species = "ogre",
+              base = {
+                "giant club",
+                "giant spiked club"
+              },
+              tags = {
+                "randart",
+                "good_item"
+              },
+              tag_rate = 0.33
+            }
+          },
+          tags = {
+            "good_item",
+            "ego:reflection"
+          },
+          tag_rate = 0.33,
+          pairings = {
+            {
+              {
+                item = "nothing",
+                weight = 40
+              },
+              {
+                item = "cloak",
+                weight = 45
+              },
+              {
+                item = "scarf",
+                weight = 15
+              }
+            },
+            {
+              {
+                type = "weapon.common",
+                weight = 25
+              },
+              {
+                type = "armor.common",
+                weight = 25
+              },
+              {
+                type = "ranged.common",
+                weight = 5
+              },
+              {
+                type = "thrown.common",
+                weight = 5
+              }
+            }
+          }
+        },
+        rare = {
+          human = {
+            {
+              base = "kite shield",
+              weight = 70
+            },
+            {
+              base = "tower shield",
+              weight = 30
+            }
+          },
+          dwarf = {
+            {
+              base = "kite shield",
+              weight = 30
+            },
+            {
+              base = "buckler",
+              weight = 70
+            }
           },
           support_guards = {
             {
@@ -2080,7 +2222,7 @@ local function build_resonance_spec_tables()
               species = "gargoyle",
               base = {
                 "great mace",
-                "hammer"
+                "mace tile:wpn_hammer wtile:hammer itemname:hammer"
               },
               tags = {
                 "good_item"
@@ -2101,9 +2243,11 @@ local function build_resonance_spec_tables()
             },
             {
               species = "two-headed ogre",
-              base = {
-                "giant club",
-                "giant spiked club"
+              pairs = {
+                {
+                  "giant club",
+                  "giant spiked club"
+                }
               },
               tags = {
                 "randart",
@@ -2116,7 +2260,7 @@ local function build_resonance_spec_tables()
             "randart",
             "ego:reflection"
           },
-          tag_rate = 1.0,
+          tag_rate = 0.9,
           pairings = {
             {
               {
@@ -2141,10 +2285,6 @@ local function build_resonance_spec_tables()
               }
             },
             {
-              {
-                type = "nothing",
-                weight = 20
-              },
               {
                 type = "armor.common",
                 weight = 20
@@ -2250,7 +2390,7 @@ local function build_resonance_spec_tables()
             {
               species = "dwarf",
               weight = 25,
-              primary = "hammer",
+              primary = "mace tile:wpn_hammer wtile:hammer itemname:hammer",
               armour = "cloak"
             },
             {
@@ -2258,6 +2398,30 @@ local function build_resonance_spec_tables()
               weight = 25,
               primary = "great mace",
               armour = "cloak"
+            }
+          },
+          pairings = {
+            {
+              {
+                type = "nothing",
+                weight = 40
+              },
+              {
+                type = "armor.common",
+                weight = 35
+              },
+              {
+                type = "shield.common",
+                weight = 5
+              },
+              {
+                type = "thrown.common",
+                weight = 10
+              },
+              {
+                type = "ranged.common",
+                weight = 10
+              }
             }
           }
         },
@@ -2282,10 +2446,6 @@ local function build_resonance_spec_tables()
                   "dagger"
                 },
                 {
-                  "quick blade",
-                  "dagger"
-                },
-                {
                   "club",
                   "whip"
                 }
@@ -2305,7 +2465,7 @@ local function build_resonance_spec_tables()
               species = "gargoyle",
               base = {
                 "great mace",
-                "hammer"
+                "mace tile:wpn_hammer wtile:hammer itemname:hammer"
               },
               tags = {
                 "good_item"
@@ -2330,13 +2490,9 @@ local function build_resonance_spec_tables()
             "ego:speed",
             "ego:electrocution"
           },
-          tag_rate = 0.5,
+          tag_rate = 0.33,
           pairings = {
             {
-              {
-                type = "nothing",
-                weight = 40
-              },
               {
                 type = "armor.common",
                 weight = 35
@@ -2385,7 +2541,7 @@ local function build_resonance_spec_tables()
                   "whip"
                 },
                 {
-                  "hammer",
+                  "mace tile:wpn_hammer wtile:hammer itemname:hammer",
                   "whip"
                 }
               }
@@ -2412,7 +2568,7 @@ local function build_resonance_spec_tables()
               species = "gargoyle",
               base = {
                 "great mace",
-                "hammer"
+                "mace tile:wpn_hammer wtile:hammer itemname:hammer"
               },
               tags = {
                 "good_item"
@@ -2433,9 +2589,15 @@ local function build_resonance_spec_tables()
             },
             {
               species = "two-headed ogre",
-              base = {
-                "giant club, giant club",
-                "giant spiked club, giant club"
+              pairs = {
+                {
+                  "giant club",
+                  "giant club"
+                },
+                {
+                  "giant spiked club",
+                  "giant club"
+                }
               },
               tags = {
                 "randart",
@@ -2448,7 +2610,7 @@ local function build_resonance_spec_tables()
             "ego:speed",
             "ego:electrocution"
           },
-          tag_rate = 1.0,
+          tag_rate = 0.9,
           pairings = {
             {
               {
@@ -2531,11 +2693,11 @@ local function build_resonance_spec_tables()
           dwarf = {
             {
               base = "arbalest",
-              weight = 60
+              weight = 80
             },
             {
               base = "hand cannon",
-              weight = 40
+              weight = 20
             }
           },
           support_guards = {
@@ -2558,8 +2720,14 @@ local function build_resonance_spec_tables()
             "shortbow"
           },
           dwarf = {
-            "hand cannon",
-            "arbalest"
+            {
+              base = "hand cannon",
+              weight = 20
+            },
+            {
+              base = "arbalest",
+              weight = 80
+            }
           },
           support_guards = {
             {
@@ -2579,7 +2747,7 @@ local function build_resonance_spec_tables()
               species = "gargoyle",
               base = {
                 "great mace",
-                "hammer"
+                "mace tile:wpn_hammer wtile:hammer itemname:hammer"
               },
               tags = {
                 "good_item"
@@ -2592,7 +2760,7 @@ local function build_resonance_spec_tables()
                 "randart",
                 "good_item"
               },
-              tag_rate = 0.5
+              tag_rate = 0.33
             }
           },
           tags = {
@@ -2601,7 +2769,7 @@ local function build_resonance_spec_tables()
             "ego:penetration",
             "ego:electrocution"
           },
-          tag_rate = 0.5,
+          tag_rate = 0.33,
           pairings = {
             {
               {
@@ -2634,8 +2802,14 @@ local function build_resonance_spec_tables()
             "arbalest"
           },
           dwarf = {
-            "hand cannon",
-            "arbalest"
+            {
+              base = "hand cannon",
+              weight = 30
+            },
+            {
+              base = "arbalest",
+              weight = 70
+            }
           },
           support_guards = {
             {
@@ -2655,7 +2829,7 @@ local function build_resonance_spec_tables()
               species = "gargoyle",
               base = {
                 "great mace",
-                "hammer"
+                "mace tile:wpn_hammer wtile:hammer itemname:hammer"
               },
               tags = {
                 "good_item"
@@ -2668,7 +2842,7 @@ local function build_resonance_spec_tables()
                 "randart",
                 "good_item"
               },
-              tag_rate = 0.5
+              tag_rate = 0.33
             },
             {
               species = "steam dragon",
@@ -2676,7 +2850,7 @@ local function build_resonance_spec_tables()
                 "randart",
                 "good_item"
               },
-              tag_rate = 0.5
+              tag_rate = 0.33
             }
           },
           tags = {
@@ -2685,7 +2859,7 @@ local function build_resonance_spec_tables()
             "ego:penetration",
             "ego:electrocution"
           },
-          tag_rate = 1.0,
+          tag_rate = 0.9,
           pairings = {
             {
               {
@@ -2745,7 +2919,8 @@ local function build_resonance_spec_tables()
               qty = 2
             },
             {
-              base = "boomerang"
+              base = "boomerang",
+              qty = 1
             }
           },
           merfolk = {
@@ -2799,7 +2974,7 @@ local function build_resonance_spec_tables()
               species = "gargoyle",
               base = {
                 "great mace",
-                "hammer"
+                "mace tile:wpn_hammer wtile:hammer itemname:hammer"
               },
               tags = {
                 "good_item"
@@ -2894,7 +3069,7 @@ local function build_resonance_spec_tables()
               species = "gargoyle",
               base = {
                 "great mace",
-                "hammer"
+                "mace tile:wpn_hammer wtile:hammer itemname:hammer"
               },
               tags = {
                 "good_item"
@@ -3059,10 +3234,13 @@ local function build_resonance_spec_tables()
               source = "offhand.common"
             },
             {
+              species = "peacekeeper"
+            },
+            {
               species = "gargoyle",
               base = {
                 "great mace",
-                "hammer"
+                "mace tile:wpn_hammer wtile:hammer itemname:hammer"
               },
               tags = {
                 "good_item"
@@ -3107,15 +3285,20 @@ local function build_resonance_spec_tables()
             },
             {
               species = "two-headed ogre",
-              base = {
-                "giant club",
-                "giant spiked club"
+              pairs = {
+                {
+                  "giant club",
+                  "giant spiked club"
+                }
               },
               tags = {
                 "randart",
                 "good_item"
               },
               tag_rate = 0.33
+            },
+            {
+              species = "peacekeeper"
             },
             {
               species = "coglin duelist",
@@ -3128,7 +3311,7 @@ local function build_resonance_spec_tables()
             "ego:electrocution",
             "ego:heavy"
           },
-          tag_rate = 0.5,
+          tag_rate = 0.33,
           pairings = {
             {
               {
@@ -3188,7 +3371,7 @@ local function build_resonance_spec_tables()
               species = "war gargoyle",
               base = {
                 "great mace",
-                "hammer"
+                "mace tile:wpn_hammer wtile:hammer itemname:hammer"
               },
               tags = {
                 "good_item"
@@ -3205,7 +3388,7 @@ local function build_resonance_spec_tables()
             "ego:electrocution",
             "ego:heavy"
           },
-          tag_rate = 1.0,
+          tag_rate = 0.9,
           pairings = {
             {
               {
@@ -3299,12 +3482,15 @@ local function build_resonance_spec_tables()
               species = "gargoyle",
               base = {
                 "great mace",
-                "hammer"
+                "mace tile:wpn_hammer wtile:hammer itemname:hammer"
               },
               tags = {
                 "good_item"
               },
               tag_rate = 0.33
+            },
+            {
+              species = "peacekeeper"
             }
           },
           pairings = {
@@ -3315,11 +3501,45 @@ local function build_resonance_spec_tables()
               },
               {
                 base = "cloak",
-                weight = 45
+                weight = 45,
+                tags = {
+                  {
+                    tag = "ego:corrosion_resistance",
+                    rate = 0.33
+                  }
+                }
               },
               {
                 base = "scarf",
+                weight = 15,
+                tags = {
+                  {
+                    tag = "ego:repulsion",
+                    rate = 0.33
+                  }
+                }
+              }
+            },
+            {
+              {
+                type = "nothing",
+                weight = 20
+              },
+              {
+                type = "weapon.common",
+                weight = 40
+              },
+              {
+                type = "shield.common",
                 weight = 15
+              },
+              {
+                type = "ranged.common",
+                weight = 15
+              },
+              {
+                type = "thrown.common",
+                weight = 10
               }
             }
           }
@@ -3355,6 +3575,9 @@ local function build_resonance_spec_tables()
               source = "offhand.uncommon"
             },
             {
+              species = "peacekeeper"
+            },
+            {
               species = "tengu warrior"
             },
             {
@@ -3366,7 +3589,7 @@ local function build_resonance_spec_tables()
             "ego:resonance",
             "ego:ponderousness"
           },
-          tag_rate = 0.5,
+          tag_rate = 0.33,
           pairings = {
             {
               {
@@ -3379,7 +3602,7 @@ local function build_resonance_spec_tables()
                 tags = {
                   {
                     tag = "ego:corrosion_resistance",
-                    rate = 0.5
+                    rate = 0.33
                   }
                 }
               },
@@ -3389,16 +3612,12 @@ local function build_resonance_spec_tables()
                 tags = {
                   {
                     tag = "ego:repulsion",
-                    rate = 0.5
+                    rate = 0.33
                   }
                 }
               }
             },
             {
-              {
-                type = "nothing",
-                weight = 20
-              },
               {
                 type = "weapon.common",
                 weight = 40
@@ -3461,7 +3680,7 @@ local function build_resonance_spec_tables()
               species = "war gargoyle",
               base = {
                 "great mace",
-                "hammer"
+                "mace tile:wpn_hammer wtile:hammer itemname:hammer"
               },
               tags = {
                 "good_item"
@@ -3472,7 +3691,7 @@ local function build_resonance_spec_tables()
               species = "iron golem"
             }
           },
-          tag_rate = 1.0,
+          tag_rate = 0.9,
           tags = {
             "randart"
           },
@@ -3502,10 +3721,6 @@ local function build_resonance_spec_tables()
               }
             },
             {
-              {
-                type = "nothing",
-                weight = 200
-              },
               {
                 type = "weapon.common",
                 weight = 125
@@ -3556,18 +3771,23 @@ local function build_resonance_spec_tables()
         },
         common = {
           human = {
-            "buckler",
-            "kite shield",
-            "tower shield"
-          },
-          dwarf = {
             {
-              base = "tower shield",
+              base = "kite shield",
               weight = 70
             },
             {
+              base = "tower shield",
+              weight = 30
+            }
+          },
+          dwarf = {
+            {
               base = "kite shield",
               weight = 30
+            },
+            {
+              base = "buckler",
+              weight = 70
             }
           },
           tengu = {
@@ -3586,48 +3806,20 @@ local function build_resonance_spec_tables()
               source = "offhand.common"
             },
             {
+              species = "peacekeeper"
+            },
+            {
               species = "gargoyle",
               base = {
                 "great mace",
-                "hammer"
+                "mace tile:wpn_hammer wtile:hammer itemname:hammer"
               },
               tags = {
                 "good_item"
               },
               tag_rate = 0.33
             }
-          }
-        },
-        uncommon = {
-          human = {
-            "kite shield",
-            "tower shield"
           },
-          dwarf = {
-            "tower shield",
-            "kite shield"
-          },
-          tengu = {
-            "tower shield",
-            "kite shield"
-          },
-          support_guards = {
-            {
-              species = "coglin duelist",
-              source = "offhand.uncommon"
-            },
-            {
-              species = "tengu warrior"
-            },
-            {
-              species = "tengu conjurer"
-            }
-          },
-          tags = {
-            "good_item",
-            "ego:reflection"
-          },
-          tag_rate = 0.5,
           pairings = {
             {
               {
@@ -3667,14 +3859,122 @@ local function build_resonance_spec_tables()
             }
           }
         },
-        rare = {
+        uncommon = {
           human = {
-            "kite shield",
-            "tower shield"
+            {
+              base = "kite shield",
+              weight = 70
+            },
+            {
+              base = "tower shield",
+              weight = 30
+            }
           },
           dwarf = {
-            "tower shield",
-            "kite shield"
+            {
+              base = "kite shield",
+              weight = 30
+            },
+            {
+              base = "buckler",
+              weight = 70
+            }
+          },
+          tengu = {
+            {
+              base = "kite shield",
+              weight = 70
+            },
+            {
+              base = "tower shield",
+              weight = 30
+            }
+          },
+          support_guards = {
+            {
+              species = "coglin duelist",
+              source = "offhand.uncommon"
+            },
+            {
+              species = "peacekeeper"
+            },
+            {
+              species = "tengu warrior"
+            },
+            {
+              species = "tengu conjurer"
+            }
+          },
+          tags = {
+            "good_item",
+            "ego:reflection"
+          },
+          tag_rate = 0.33,
+          pairings = {
+            {
+              {
+                item = "nothing",
+                weight = 40
+              },
+              {
+                item = "cloak",
+                weight = 45
+              },
+              {
+                item = "scarf",
+                weight = 15
+              }
+            },
+            {
+              {
+                type = "weapon.common",
+                weight = 25
+              },
+              {
+                type = "armor.common",
+                weight = 25
+              },
+              {
+                type = "ranged.common",
+                weight = 5
+              },
+              {
+                type = "thrown.common",
+                weight = 5
+              }
+            }
+          }
+        },
+        rare = {
+          human = {
+            {
+              base = "kite shield",
+              weight = 70
+            },
+            {
+              base = "tower shield",
+              weight = 30
+            }
+          },
+          dwarf = {
+            {
+              base = "kite shield",
+              weight = 30
+            },
+            {
+              base = "buckler",
+              weight = 70
+            }
+          },
+          tengu = {
+            {
+              base = "kite shield",
+              weight = 70
+            },
+            {
+              base = "tower shield",
+              weight = 30
+            }
           },
           support_guards = {
             {
@@ -3691,7 +3991,7 @@ local function build_resonance_spec_tables()
               species = "war gargoyle",
               base = {
                 "great mace",
-                "hammer"
+                "mace tile:wpn_hammer wtile:hammer itemname:hammer"
               },
               tags = {
                 "good_item"
@@ -3706,7 +4006,7 @@ local function build_resonance_spec_tables()
             "randart",
             "ego:reflection"
           },
-          tag_rate = 1.0,
+          tag_rate = 0.9,
           pairings = {
             {
               {
@@ -3731,10 +4031,6 @@ local function build_resonance_spec_tables()
               }
             },
             {
-              {
-                type = "nothing",
-                weight = 20
-              },
               {
                 type = "armor.common",
                 weight = 20
@@ -3855,7 +4151,7 @@ local function build_resonance_spec_tables()
             {
               species = "dwarf",
               weight = 20,
-              primary = "hammer",
+              primary = "mace tile:wpn_hammer wtile:hammer itemname:hammer",
               tags = {
                 "good_item"
               },
@@ -3919,9 +4215,12 @@ local function build_resonance_spec_tables()
             "ego:speed",
             "ego:electrocution"
           },
-          tag_rate = 0.5,
+          tag_rate = 0.33,
           pairings = {
             {
+              {
+                species = "peacekeeper"
+              },
               {
                 type = "nothing",
                 weight = 40
@@ -3974,7 +4273,7 @@ local function build_resonance_spec_tables()
                   "whip"
                 },
                 {
-                  "hammer",
+                  "mace tile:wpn_hammer wtile:hammer itemname:hammer",
                   "whip"
                 }
               }
@@ -3995,7 +4294,7 @@ local function build_resonance_spec_tables()
               species = "war gargoyle",
               base = {
                 "great mace",
-                "hammer"
+                "mace tile:wpn_hammer wtile:hammer itemname:hammer"
               },
               tags = {
                 "good_item"
@@ -4011,7 +4310,7 @@ local function build_resonance_spec_tables()
             "ego:speed",
             "ego:electrocution"
           },
-          tag_rate = 1.0,
+          tag_rate = 0.9,
           pairings = {
             {
               {
@@ -4098,11 +4397,11 @@ local function build_resonance_spec_tables()
           dwarf = {
             {
               base = "arbalest",
-              weight = 60
+              weight = 70
             },
             {
               base = "hand cannon",
-              weight = 40
+              weight = 20
             }
           },
           tengu = {
@@ -4135,8 +4434,14 @@ local function build_resonance_spec_tables()
             "shortbow"
           },
           dwarf = {
-            "hand cannon",
-            "arbalest"
+            {
+              base = "hand cannon",
+              weight = 30
+            },
+            {
+              base = "arbalest",
+              weight = 70
+            }
           },
           tengu = {
             "longbow",
@@ -4146,6 +4451,9 @@ local function build_resonance_spec_tables()
             {
               species = "coglin duelist",
               source = "offhand.uncommon"
+            },
+            {
+              species = "peacekeeper"
             },
             {
               species = "tengu warrior"
@@ -4176,7 +4484,7 @@ local function build_resonance_spec_tables()
             "ego:penetration",
             "ego:electrocution"
           },
-          tag_rate = 0.5,
+          tag_rate = 0.33,
           pairings = {
             {
               {
@@ -4209,8 +4517,14 @@ local function build_resonance_spec_tables()
             "arbalest"
           },
           dwarf = {
-            "hand cannon",
-            "arbalest"
+            {
+              base = "hand cannon",
+              weight = 40
+            },
+            {
+              base = "arbalest",
+              weight = 60
+            }
           },
           tengu = {
             "longbow",
@@ -4231,7 +4545,7 @@ local function build_resonance_spec_tables()
               species = "war gargoyle",
               base = {
                 "great mace",
-                "hammer"
+                "mace tile:wpn_hammer wtile:hammer itemname:hammer"
               },
               tags = {
                 "good_item"
@@ -4248,7 +4562,7 @@ local function build_resonance_spec_tables()
             "ego:penetration",
             "ego:electrocution"
           },
-          tag_rate = 1.0,
+          tag_rate = 0.9,
           pairings = {
             {
               {
@@ -4308,7 +4622,8 @@ local function build_resonance_spec_tables()
               qty = 2
             },
             {
-              base = "boomerang"
+              base = "boomerang",
+              qty = 1
             }
           },
           merfolk = {
@@ -4363,6 +4678,9 @@ local function build_resonance_spec_tables()
             },
             {
               species = "cyclops"
+            },
+            {
+              species = "peacekeeper"
             },
             {
               species = "merfolk javelineer"
@@ -4435,7 +4753,7 @@ local function build_resonance_spec_tables()
               species = "war gargoyle",
               base = {
                 "great mace",
-                "hammer"
+                "mace tile:wpn_hammer wtile:hammer itemname:hammer"
               },
               tags = {
                 "good_item"
@@ -4568,18 +4886,18 @@ local function build_resonance_spec_tables()
   bucket = {
     {
       name = "early_dungeon",
-      inner_fill_rate = 0.5,
+      inner_fill_rate = 0.33,
       outer_fill_rate = 0.6
     },
     {
       name = "mid_dungeon",
-      inner_fill_rate = 0.6,
-      outer_fill_rate = 0.7
+      inner_fill_rate = 0.335,
+      outer_fill_rate = 0.65
     },
     {
       name = "late_dungeon",
-      inner_fill_rate = 0.7,
-      outer_fill_rate = 0.8
+      inner_fill_rate = 0.6,
+      outer_fill_rate = 0.7
     }
   }
 }

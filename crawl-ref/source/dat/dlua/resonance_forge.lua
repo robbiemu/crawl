@@ -58,12 +58,12 @@ end
 local SPELL_NAME_MAP = {
     ["Kinetic Grapnel"] = "kinetic_grapnel",
     ["Launch Clockwork Bee"] = "launch_clockwork_bee",
-    ["Iskenderun's Battlesphere"] = "battlesphere",
+    ["Iskenderun's Battlesphere"] = "iskenderun's_battlesphere",
     ["Forge Blazeheart Golem"] = "forge_blazeheart_golem",
     ["Forge Lightning Spire"] = "forge_lightning_spire",
-    ["Alistair's Walking Alembic"] = "walking_alembic",
+    ["Alistair's Walking Alembic"] = "alistair's_walking_alembic",
     ["Hoarfrost Cannonade"] = "hoarfrost_cannonade",
-    ["Nazja's Percussive Tempering"] = "percussive_tempering",
+    ["Nazja's Percussive Tempering"] = "nazja's_all-purpose_tempering",
     ["Forge Phalanx Beetle"] = "forge_phalanx_beetle",
     ["Hellfire Mortar"] = "hellfire_mortar",
     ["Spellspark Servitor"] = "spellspark_servitor",
@@ -313,6 +313,9 @@ local function place_guardian(x, y, spec, roll)
     local mon = dgn.create_monster(x, y, spec)
     if mon and roll then
         drop_roll_items(x, y, roll)
+        if roll.death_drops and mon.props then
+            mon.props.forge_death_drops = roll.death_drops
+        end
     end
     return awaken_guardian(mon)
 end
@@ -351,20 +354,34 @@ local function should_apply_tag(rate)
 end
 
 local function collect_tags(tag_defs, default_rate)
-    if not tag_defs then
+    if not tag_defs or #tag_defs == 0 then
         return {}
     end
-    local tags = {}
-    for _, tag in ipairs(tag_defs) do
-        if type(tag) == "table" then
-            if tag.tag and should_apply_tag(tag.rate or default_rate) then
-                table.insert(tags, tag.tag)
-            end
-        elseif tag and should_apply_tag(default_rate) then
-            table.insert(tags, tag)
-        end
+
+    -- Roll once for the entire group of tags
+    if not should_apply_tag(default_rate) then
+        return {}
     end
-    return tags
+
+    -- Pick exactly one tag from the list at random
+    local idx = crawl.random2(#tag_defs) + 1
+    local choice = tag_defs[idx]
+
+    if type(choice) == "table" then
+        -- If the specific tag has an additional rate constraint, check it
+        if choice.rate and not should_apply_tag(choice.rate) then
+            return {}
+        end
+        if choice.tag then
+            return { choice.tag }
+        end
+        return {}
+    end
+
+    if choice then
+        return { choice }
+    end
+    return {}
 end
 
 local function merge_tags(list1, list2)
@@ -384,7 +401,7 @@ local function merge_tags(list1, list2)
     return out
 end
 
-local function sanitize_item_tags(tags)
+local function sanitize_item_tags(tags, base)
     if not tags or #tags == 0 then
         return {}
     end
@@ -393,7 +410,9 @@ local function sanitize_item_tags(tags)
     local brand_candidates = {}
     for _, tag in ipairs(tags) do
         if tag and tag ~= "" and not seen[tag] then
-            if tag:match("^ego:") then
+            if base == "quick blade" and tag == "ego:speed" then
+                -- skip invalid ego for quick blade
+            elseif tag:match("^ego:") then
                 seen[tag] = true
                 table.insert(brand_candidates, tag)
             else
@@ -422,9 +441,10 @@ local function build_item(base, opts)
     local tier_tags = collect_tags(opts.tier_tags, opts.tier_tag_rate)
     local extra_tags = opts.extra_tags or {}
     local tags = merge_tags(entry_tags, merge_tags(tier_tags, extra_tags))
-    tags = sanitize_item_tags(tags)
+    local trimmed_base = trim_string(base)
+    tags = sanitize_item_tags(tags, trimmed_base)
     local item = {
-        base = trim_string(base),
+        base = trimmed_base,
         qty = opts.qty,
         tags = tags,
     }
@@ -617,14 +637,16 @@ local function add_entry_items_to_roll(roll, entry, tier_tags, tier_tag_rate)
     end
 
     local bases = split_item_list(entry.primary or entry.base or entry.item)
-    for idx, base in ipairs(bases) do
+    if #bases > 0 then
+        -- Select one item from the base list to be the primary item
+        local base = bases[crawl.random2(#bases) + 1]
         if base ~= "nothing" then
             local item = build_item(base, {
                 entry_tags = entry.tags,
                 entry_tag_rate = entry.tag_rate,
                 tier_tags = tier_tags,
                 tier_tag_rate = tier_tag_rate,
-                qty = idx == 1 and entry.qty or nil,
+                qty = entry.qty,
             })
             add_item_to_roll(roll, item)
         end
@@ -824,25 +846,30 @@ local function build_support_guard_roll(bucket_name, target, tier_name, tier_dat
         roll.no_equip = opts and opts.no_equip or false
         add_entry_items_to_roll(roll, entry, nil, nil)
         if not roll.main_item then
-            local scale_name = DRAGON_SCALE_DROPS[roll.species]
+            local check_species = roll.species and roll.species:lower()
+            local scale_name = check_species and DRAGON_SCALE_DROPS[check_species]
             if scale_name then
-                local scale_item = build_item(scale_name, {
-                    entry_tags = entry.tags,
-                    entry_tag_rate = entry.tag_rate,
-                })
-                if scale_item then
-                    table.insert(roll.extra_items, scale_item)
+                if should_apply_tag(entry.tag_rate) then
+                    local scale_item = build_item(scale_name, {
+                        entry_tags = entry.tags,
+                        entry_tag_rate = 1.0,
+                    })
+                    if scale_item then
+                        -- Store in death_drops for the death hook to handle, instead of extra_items
+                        roll.death_drops = roll.death_drops or {}
+                        table.insert(roll.death_drops, scale_item)
+                    end
                 end
-                roll.main_item = { base = "nothing", desc = "nothing" }
+                -- Force no_equip for dragons so we don't generate invalid "; nothing" specs
+                roll.no_equip = true
             end
         end
-        if not roll.main_item then
-            roll.main_item = build_item(DEFAULT_TARGET_ITEMS[target] or "nothing")
-        end
+        -- Fallback removed: support guards without defined items should get nothing (e.g. dragons)
         if roll.main_item then
             return roll
         end
-        return nil
+        -- Allow return even if main_item is nil (implies 'nothing')
+        return roll
     end
 
     if forced_species then
@@ -1066,25 +1093,6 @@ local function guardian_fill_rate(bucket, slot_key)
     return fill.outer or 1
 end
 
-local STEAM_BUCKETS = {
-    [BUCKETS.early.name] = true,
-    [BUCKETS.mid.name] = true,
-}
-
-local GARGOYLE_GUARDS = {
-    [BUCKETS.mid.name] = { primary = { "gargoyle" }, secondary = { "war gargoyle" } },
-    [BUCKETS.late.name] = { primary = { "war gargoyle" }, secondary = { "molten gargoyle" } },
-}
-
-local GOLEM_GUARDS = {
-    [BUCKETS.mid.name] = { primary = { "peacekeeper" } },
-    [BUCKETS.late.name] = { primary = { "peacekeeper" }, secondary = { "toenail golem" } },
-}
-
-local GOLEM_CHANCE = 5
-local GARGOYLE_CHANCE = 7
-local STEAM_CHANCE = 10
-
 local function random_choice(list)
     if not list or #list == 0 then
         return nil
@@ -1101,7 +1109,7 @@ local function choose_common_guard(bucket, target, opts)
     end
     local roll = build_guard_roll(bucket, target, opts)
     if roll then
-        roll.no_equip = opts.no_equip or false
+        roll.no_equip = roll.no_equip or opts.no_equip or false
         local spec
         if roll.no_equip then
             spec = roll.species or type_to_species(roll.type)
@@ -1128,90 +1136,7 @@ local function choose_common_guard(bucket, target, opts)
     return string.format("%s ; %s", species, item), nil
 end
 
-local function weighted_choice(pools, weights)
-    local total = 0
-    for _, w in ipairs(weights) do
-        total = total + w
-    end
-    local roll = crawl.random2(total)
-    local accum = 0
-    for idx, w in ipairs(weights) do
-        accum = accum + w
-        if roll < accum then
-            return random_choice(pools[idx])
-        end
-    end
-    return nil
-end
-
-local function choose_gargoyle_guard(bucket)
-    local pools = GARGOYLE_GUARDS[bucket]
-    if not pools then
-        return nil
-    end
-    local choices = {}
-    local weights = {}
-    if pools.primary then
-        table.insert(choices, pools.primary)
-        table.insert(weights, 70)
-    end
-    if pools.secondary then
-        table.insert(choices, pools.secondary)
-        table.insert(weights, 25)
-    end
-    if pools.tertiary then
-        table.insert(choices, pools.tertiary)
-        table.insert(weights, 5)
-    end
-    if #choices == 0 then
-        return nil
-    end
-    return weighted_choice(choices, weights)
-end
-
-local function choose_golem_guard(bucket, target)
-    local pools = GOLEM_GUARDS[bucket]
-    if not pools then
-        return nil
-    end
-    local choices = {}
-    local weights = {}
-    local function add_pool(pool, weight)
-        if pool and #pool > 0 then
-            table.insert(choices, pool)
-            table.insert(weights, weight)
-        end
-    end
-    add_pool(pools.primary, 75)
-    add_pool(pools.secondary, 25)
-    if #choices == 0 then
-        return nil
-    end
-    return weighted_choice(choices, weights)
-end
-
 local function choose_guard_spec(bucket, target)
-    if bucket and crawl.random2(100) < GOLEM_CHANCE then
-        local golem = choose_golem_guard(bucket, target)
-        if golem then
-            return golem, nil
-        end
-    end
-    if bucket and GARGOYLE_GUARDS[bucket] and crawl.random2(100) < GARGOYLE_CHANCE then
-        local garg = choose_gargoyle_guard(bucket)
-        if garg then
-            return garg, nil
-        end
-    end
-    if STEAM_BUCKETS[bucket] and crawl.random2(100) < STEAM_CHANCE then
-        local spec, roll = choose_common_guard(bucket, target, {
-            support_species = "steam dragon",
-            no_equip = true,
-        })
-        if spec then
-            return spec, roll
-        end
-    end
     return choose_common_guard(bucket, target)
 end
 
@@ -1252,6 +1177,8 @@ end
 function ResonanceForgeMarker:activate(marker)
     local ev = dgn.dgn_event_type('player_climb')
     dgn.register_listener(ev, marker, marker:pos())
+    local ev_death = dgn.dgn_event_type('monster_dies')
+    dgn.register_listener(ev_death, marker, marker:pos())
 end
 
 local function _forgewright_text(target)
@@ -1622,11 +1549,26 @@ local function spawn_conduit_spires(target, bucket)
     local species = bucket == BUCKETS.early.name and "iron statue"
         or "lightning spire"
     local conduits = get_spawn_positions("resonance_forge_conduit", "spire")
+    
+    shuffle(conduits)
+    
+    local spire_count = 0
+    local max_spires = (bucket == BUCKETS.mid.name) and 1 or 999
+
     for _, pos in ipairs(conduits) do
-        if species == "iron statue" then
+        local spawn_species = species
+        if species == "lightning spire" then
+            if spire_count >= max_spires then
+                spawn_species = "iron statue"
+            else
+                spire_count = spire_count + 1
+            end
+        end
+
+        if spawn_species == "iron statue" then
             dgn.terrain_changed(pos.x, pos.y, "metal statue")
         else
-            dgn.create_monster(pos.x, pos.y, species)
+            dgn.create_monster(pos.x, pos.y, spawn_species)
         end
     end
 end
@@ -1670,7 +1612,46 @@ function resonance_forge_spawn_wave(marker_obj, forced_branch, forced_depth, opt
 end
 
 function ResonanceForgeMarker:event(marker, ev)
-    if ev:type() ~= dgn.dgn_event_type('player_climb') then
+    local type = ev:type()
+    if type == dgn.dgn_event_type('monster_dies') then
+        local mid = ev:arg1()
+        local mon = dgn.mons_from_mid(mid)
+        if mon and mon.props.forge_death_drops then
+            local pos = mon.pos()
+            for _, item_spec in ipairs(mon.props.forge_death_drops) do
+                local spec = item_spec.desc or item_spec.base
+                if not spec or spec == "nothing" then
+                   goto continue_drops
+                end
+                
+                -- Check for existing generic items of same base at this pos
+                -- to avoid duplicates (user requested override)
+                local floor_items = dgn.items_at(pos.x, pos.y)
+                local replaced = false
+                if floor_items then
+                    for _, item in ipairs(floor_items) do
+                        local iname = item.name()
+                        local base = item_spec.base
+                        -- Simple heuristic: if the natural drop matches the base
+                        -- of the custom drop, remove natural drop.
+                        if iname and base and iname:find(base) then
+                            item:destroy()
+                            replaced = true
+                            break
+                        end
+                    end
+                end
+
+                if replaced then
+                    dgn.create_item(pos.x, pos.y, spec)
+                end
+                ::continue_drops::
+            end
+        end
+        return true
+    end
+
+    if type ~= dgn.dgn_event_type('player_climb') then
         return true
     end
     local x, y = ev:pos()
