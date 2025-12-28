@@ -1,6 +1,6 @@
 # Resonance Forge Portal Overview
 
-The Resonance Forge is a one-off portal branch designed to give players an optional, high-variance equipment upgrade opportunity in the early-to-mid Dungeon. This document captures the intent of the portal, the systems that drive it, and the major data tables so reviewers and maintainers can reason about future changes.
+The Resonance Forge is a one-off portal branch designed to give players an optional, high-variance equipment upgrade opportunity in the Dungeon (D5:15). This document captures the intent of the portal, the systems that drive it, and the major data tables so reviewers and maintainers can reason about future changes.
 
 ## Where and how the portal appears
 
